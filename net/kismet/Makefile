@@ -27,9 +27,8 @@ define Package/kismet/Default
   MAINTAINER:=John Thomson <maint@johnthomson.fastmail.com.au>
   DEPENDS:= +libstdcpp +libpthread +libpcap +libcap \
 	    +libwebsockets-full \
-	    +protobuf-lite +libprotobuf-c
-	    #+libnl 
-	    #+python3-websockets +python3-protobuf
+	    +protobuf-lite +libprotobuf-c \
+	    +libnl +python3-websockets +python3-protobuf
   URL:=http://www.kismetwireless.net/
   SUBMENU:=Wireless
 endef
@@ -42,10 +41,10 @@ endef
 CONFIGURE_ARGS += \
 	--sysconfdir=/etc/kismet \
 	--bindir=/usr/bin \
-	--disable-debuglibs
+	--disable-debuglibs \
+	--enable-capture-tools-only
 	#--disable-python-tools \
 	#--enable-protobuflite \
-	#--enable-capture-tools-only
 	#--with-protoc=$(STAGING_DIR_HOSTPKG)/bin/protoc \
 	#--disable-element-typesafety \
 
