@@ -1,0 +1,30 @@
+From e174baab25185face1ca07191cb2bda0b63d752e Mon Sep 17 00:00:00 2001
+From: John Thomson <git@johnthomson.fastmail.com.au>
+Date: Sat, 22 Oct 2022 19:00:17 +1000
+Subject: [PATCH] xr_usb: kernel 6.1 compile fix
+
+kernel 6.1 includes a8c11c152034 ("tty: Make ->set_termios() old ktermios const") [0]
+
+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a8c11c1520347be74b02312d10ef686b01b525f1
+
+Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+---
+ xr_usb_serial_common-1a/xr_usb_serial_common.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+--- a/xr_usb_serial_common-1a/xr_usb_serial_common.c
++++ b/xr_usb_serial_common-1a/xr_usb_serial_common.c
+@@ -916,8 +916,13 @@ static int xr_usb_serial_tty_ioctl(struc
+ 	return rv;
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
++static void xr_usb_serial_tty_set_termios(struct tty_struct *tty,
++						const struct ktermios *termios_old)
++#else
+ static void xr_usb_serial_tty_set_termios(struct tty_struct *tty,
+ 						struct ktermios *termios_old)
++#endif
+ {
+ 	struct xr_usb_serial *xr_usb_serial = tty->driver_data;
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 7, 0)
